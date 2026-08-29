@@ -249,10 +249,15 @@ export default function TerminalOverlay() {
     }
 
     if (e.key === 'Enter') {
-      // Enter during a long stream skips to the end, as in a real pager.
-      // Gate on the queue ref, not the `busy` state: state is stale inside this
-      // closure, and a stuck flag would swallow every command.
-      if (queueRef.current.length > 0) { flushQueue(); return }
+      // Enter on an EMPTY line during a long stream skips to the end, the way
+      // space does at a `--More--` prompt. If something was typed, the command
+      // always wins: a real terminal never discards input just because output
+      // is still arriving. Gate on the queue ref rather than the `busy` state,
+      // which is stale inside this closure.
+      if (queueRef.current.length > 0) {
+        flushQueue()
+        if (!input.trim()) return
+      }
 
       const cmd = input.trim()
       emit([`${highlightPrompt(prompt)} ${C.bWhite(cmd)}`], false)
