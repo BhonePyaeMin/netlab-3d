@@ -1,0 +1,8 @@
+/* App.css — component-level overrides */
+
+/* Ensure canvas fills the root */
+#main-canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}

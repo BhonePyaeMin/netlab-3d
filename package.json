@@ -1,0 +1,36 @@
+{
+  "name": "netlab-3d",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node ./node_modules/vite/bin/vite.js",
+    "build": "node ./node_modules/vite/bin/vite.js build",
+    "typecheck": "node ./node_modules/typescript/bin/tsc -b --noEmit",
+    "test": "node ./node_modules/vitest/vitest.mjs run",
+    "lint": "oxlint",
+    "preview": "node ./node_modules/vite/bin/vite.js preview"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.8",
+    "@react-three/fiber": "^9.7.0",
+    "@types/three": "^0.185.4",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-draggable": "^4.7.1",
+    "three": "^0.185.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.17",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.4",
+    "@vitest/coverage-v8": "^4.1.11",
+    "oxlint": "^1.75.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.0",
+    "vitest": "^4.1.11"
+  },
+  "description": "First-person 3D network and cyber security learning simulator with a full Cisco IOS console emulator.",
+  "license": "MIT"
+}
