@@ -8,6 +8,12 @@
 ![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178c6?style=flat-square&logo=typescript)
 ![Vite](https://img.shields.io/badge/Vite-8-646cff?style=flat-square&logo=vite)
 
+### ▶ [Play it live — bhonepyaemin.github.io/netlab-3d](https://bhonepyaemin.github.io/netlab-3d/)
+
+Click to enter the lab, walk with `W A S D`, look at a router or switch and press `E`
+to open its console. Deployed automatically from `main` by
+[.github/workflows/deploy.yml](.github/workflows/deploy.yml).
+
 ---
 
 ## Overview

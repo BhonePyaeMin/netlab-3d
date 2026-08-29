@@ -603,7 +603,19 @@ const TERMINAL_CSS = `
 .nl-status-hint  { color: ${CHROME.fgDim}; }
 .nl-status-clock { color: ${CHROME.fg}; font-variant-numeric: tabular-nums; }
 
+/* Below this width the side panes would squeeze the console to nothing. */
 @media (max-width: 1100px) {
   .nl-side { display: none; }
+}
+
+/* Narrow viewports: keep the chrome on one line and drop what is optional
+   rather than letting the title and status hints wrap into stacked text. */
+@media (max-width: 760px) {
+  .nl-term-titlebar { gap: 9px; padding: 7px 10px; }
+  .nl-term-title    { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nl-term-title-dim, .nl-term-tabs { display: none; }
+  .nl-term-status   { gap: 7px; white-space: nowrap; overflow: hidden; }
+  .nl-status-hint   { display: none; }
+  .nl-term-scroll   { font-size: 11.5px; padding: 8px 10px; }
 }
 `
