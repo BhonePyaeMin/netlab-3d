@@ -19,6 +19,7 @@
 import { useEffect, useMemo, useRef } from 'react'
 import { useFrame, useThree }         from '@react-three/fiber'
 import { Billboard, Text }            from '@react-three/drei'
+import { useTerminalSession }        from '../components/TerminalScreen'
 import * as THREE                     from 'three'
 import { NetworkStore }               from '../network/NetworkStore'
 import { useNetworkStore }            from '../network/useNetworkStore'
@@ -46,6 +47,9 @@ function makeCableGeometry(
    CABLE COIL — lies on floor until picked up
    ══════════════════════════════════════════════════════════ */
 function CableCoil({ cable }: { cable: Cable }) {
+  const session = useTerminalSession()
+  const cinematic = session.deviceId !== null && session.view === '3d'
+
   const meshRef = useRef<THREE.Mesh>(null)
   const mat     = useMemo(() =>
     new THREE.MeshStandardMaterial({ color: cable.color, roughness: 0.8, metalness: 0.05 }),
@@ -90,18 +94,21 @@ function CableCoil({ cable }: { cable: Cable }) {
         <torusGeometry args={[0.045, 0.008, 6, 16]} />
       </mesh>
 
-      {/* Label */}
-      <Billboard>
-        <Text
-          position={[0, 0.16, 0]}
-          fontSize={0.045}
-          color="#00dcff"
-          anchorX="center"
-          anchorY="middle"
-        >
-          Ethernet Cable
-        </Text>
-      </Billboard>
+      {/* Label — hidden during the 3D console shot, where camera-facing
+          billboards would print themselves across the laptop screen. */}
+      {!cinematic && (
+        <Billboard>
+          <Text
+            position={[0, 0.16, 0]}
+            fontSize={0.045}
+            color="#00dcff"
+            anchorX="center"
+            anchorY="middle"
+          >
+            Ethernet Cable
+          </Text>
+        </Billboard>
+      )}
     </group>
   )
 }

@@ -23,6 +23,7 @@ import { usePointerLock }      from '../hooks/usePointerLock'
 import { usePlayerLook }       from './usePlayerLook'
 import { usePlayerPhysics }    from './usePlayerPhysics'
 import { useInteractionRay }   from './useInteractionRay'
+import { CameraDirector }       from '../scene/CameraDirector'
 
 /* Starting position — inside the lab, facing the equipment wall */
 const START_POS: [number, number, number] = [0, 1.7, 7.5]
@@ -61,6 +62,11 @@ export default function Player() {
 
   /* ── Per-frame update ─────────────────────────────────── */
   useFrame((_, delta) => {
+    // While a cinematic owns the camera (sitting down at the console), the
+    // player must not write to it as well — two writers per frame fight each
+    // other and the view judders.
+    if (CameraDirector.active) return
+
     applyLook(camera)
     applyPhysics(camera, keys.current!, delta, isLocked)
     applyRaycast(camera, scene)

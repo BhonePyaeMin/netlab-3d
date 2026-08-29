@@ -13,6 +13,7 @@ import TerminalOverlay    from './components/TerminalOverlay'
 import PacketSnifferHUD   from './components/PacketSnifferHUD'
 import PacketAnimationHUD from './components/PacketAnimationHUD'
 import PacketAnimator     from './scene/PacketAnimator'
+import ConsoleStation      from './scene/ConsoleStation'
 import { ScenariosHUD }     from './components/ScenariosHUD'
 import { ProjectMenuHUD }   from './components/ProjectMenuHUD'
 import { TopologyEditorHUD } from './components/TopologyEditorHUD'
@@ -66,6 +67,12 @@ export default function App() {
           <Player />
           <CableSystem />
           <PacketAnimator />
+        </Suspense>
+
+        {/* Its own boundary: whatever the console station loads must never
+            blank the lab behind it. */}
+        <Suspense fallback={null}>
+          <ConsoleStation />
         </Suspense>
       </Canvas>
 

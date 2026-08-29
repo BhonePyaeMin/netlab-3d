@@ -6,7 +6,7 @@
    ============================================================ */
 
 import { NetworkStore } from '../network/NetworkStore'
-import { useNetworkStore } from '../network/useNetworkStore'
+import { useTerminalSession } from './TerminalScreen'
 import { SimulationControlsHUD } from './SimulationControlsHUD'
 import { EventLogHUD } from './EventLogHUD'
 
@@ -330,6 +330,13 @@ function StatusBar() {
    ============================================================ */
 
 export default function HUD() {
+  const session = useTerminalSession()
+
+  // The 3D console is a framed cinematic — mission panels, the objectives list
+  // and the status bar would sit on top of the shot, so the lab HUD steps out
+  // of the way while it is on screen.
+  if (session.deviceId && session.view === '3d') return null
+
   return (
     <div
       id="hud-root"

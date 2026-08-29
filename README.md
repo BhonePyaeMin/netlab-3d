@@ -11,7 +11,11 @@
 ### ▶ [Play it live — bhonepyaemin.github.io/netlab-3d](https://bhonepyaemin.github.io/netlab-3d/)
 
 Click to enter the lab, walk with `W A S D`, look at a router or switch and press `E`
-to open its console. Deployed automatically from `main` by
+to open its console — you sit down at a MacBook Pro rendered in the scene, and the
+animated hands type whatever you type, on the right keys, in sync with the output on
+its display. `F4` cycles the camera between the over-the-shoulder and screen-on
+shots; the **2D console** button drops back to a flat terminal window; `Esc` stands
+back up. Deployed automatically from `main` by
 [.github/workflows/deploy.yml](.github/workflows/deploy.yml).
 
 ---

@@ -1,0 +1,222 @@
+/* =========================================================
+   Terminal chrome — shared by the flat 2D window and the
+   MacBook display inside the 3D scene.
+   ========================================================= */
+
+.nl-term-window {
+  display: flex;
+  flex-direction: column;
+  background: #05070b;
+  border: 1px solid #1b2433;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  font-family: var(--font-mono), 'JetBrains Mono', 'Courier New', monospace;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.75), 0 0 0 1px rgba(0,220,255,0.06),
+              0 0 60px rgba(0,220,255,0.05);
+}
+
+/* CRT treatment: scanlines + vignette, purely decorative and click-through. */
+.nl-term-window::after {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(to bottom,
+      rgba(255,255,255,0.018) 0px, rgba(255,255,255,0.018) 1px,
+      transparent 1px, transparent 3px),
+    radial-gradient(ellipse at center,
+      transparent 55%, rgba(0,0,0,0.35) 100%);
+  z-index: 5;
+}
+
+/* Projected onto the laptop display: fill the panel, no floating-window cues. */
+.nl-term-window.nl-term-screen {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+/* — title bar — */
+.nl-term-titlebar {
+  display: flex; align-items: center; gap: 14px;
+  padding: 8px 14px;
+  background: #0c1119;
+  border-bottom: 1px solid #1b2433;
+  flex: 0 0 auto;
+}
+.nl-term-lights { display: flex; gap: 7px; }
+.nl-term-lights span {
+  width: 11px; height: 11px; border-radius: 50%;
+  display: inline-block; cursor: pointer;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.35);
+}
+.nl-term-title { font-size: 12px; letter-spacing: 0.4px; color: #c5ccd6; }
+.nl-term-title-dim  { color: #5b6b80; }
+.nl-term-title-host { color: #00dcff; font-weight: 700; }
+.nl-term-tabs { margin-left: auto; display: flex; gap: 4px; align-items: center; }
+.nl-tab {
+  font-size: 11px; padding: 2px 9px; border-radius: 3px; cursor: pointer;
+  color: #5b6b80; background: rgba(255,255,255,0.03);
+}
+.nl-tab-on { color: #05070b; background: #27c93f; font-weight: 700; }
+.nl-tab-alt { color: #05070b; background: #00dcff; font-weight: 700; }
+
+/* — panes — */
+.nl-term-body { flex: 1; display: flex; min-height: 0; gap: 1px; background: #1b2433; }
+.nl-pane {
+  display: flex; flex-direction: column; min-height: 0; min-width: 0;
+  background: #070a10;
+}
+.nl-pane-main { flex: 1.7 1 0; }
+.nl-side {
+  flex: 1 1 0; display: flex; flex-direction: column; gap: 1px;
+  min-width: 300px; max-width: 480px; background: #1b2433;
+}
+.nl-pane-capture { flex: 1.15 1 0; }
+.nl-pane-hex     { flex: 1 1 0; }
+
+.nl-pane-head {
+  font-size: 10.5px; letter-spacing: 1.4px; text-transform: uppercase;
+  padding: 5px 12px; background: rgba(255,255,255,0.025);
+  border-bottom: 1px solid #1b2433; flex: 0 0 auto; font-weight: 700;
+}
+.nl-pane-head-dim { color: #5b6b80; font-weight: 400; letter-spacing: 0.6px; }
+
+.nl-term-scroll {
+  flex: 1; overflow-y: auto; overflow-x: auto;
+  padding: 10px 14px;
+  font-size: 13px; line-height: 1.45;
+  color: #c5ccd6;
+  user-select: text; cursor: text;
+  scrollbar-width: thin;
+}
+.nl-term-line, .nl-term-line-inline { white-space: pre; min-height: 1.45em; }
+.nl-term-line-inline { display: inline; }
+
+/* — input line — */
+.nl-term-inputrow { display: flex; align-items: baseline; white-space: pre; }
+.nl-term-inputwrap { position: relative; flex: 1; display: inline-block; margin-left: 1ch; }
+.nl-term-input {
+  width: 100%; background: transparent; border: none; outline: none;
+  color: #ffffff; font: inherit; caret-color: transparent; padding: 0;
+}
+.nl-term-cursor {
+  position: absolute; top: 0.12em; width: 0.62ch; height: 1.15em;
+  background: #00dcff; box-shadow: 0 0 8px rgba(0,220,255,0.8);
+  animation: nl-blink 1.05s steps(1) infinite; pointer-events: none;
+}
+@keyframes nl-blink { 0%,49% { opacity: 1 } 50%,100% { opacity: 0 } }
+
+/* — capture table — */
+.nl-capture { padding: 0; }
+.nl-cap-table { width: 100%; border-collapse: collapse; font-size: 11.5px; }
+.nl-cap-table thead th {
+  position: sticky; top: 0; z-index: 1;
+  background: #27c93f; color: #05070b;
+  font-weight: 700; letter-spacing: 0.8px;
+  text-align: left; padding: 4px 8px;
+}
+.nl-cap-table td {
+  padding: 2px 8px; border-bottom: 1px solid rgba(255,255,255,0.04);
+  white-space: nowrap; color: #c5ccd6;
+}
+.nl-cap-table tbody tr:nth-child(odd) td { background: rgba(255,255,255,0.018); }
+.nl-dim   { color: #5b6b80; }
+.nl-empty { color: #5b6b80; text-align: center; padding: 18px 0; }
+
+.nl-hex { font-size: 11.5px; line-height: 1.5; }
+
+/* — status bar — */
+.nl-term-status {
+  display: flex; align-items: center; gap: 10px;
+  padding: 4px 12px; font-size: 11px;
+  background: #101722;
+  border-top: 1px solid #1b2433;
+  color: #5b6b80; flex: 0 0 auto;
+}
+.nl-status-tag {
+  background: #27c93f; color: #05070b;
+  padding: 1px 8px; border-radius: 2px; font-weight: 700; letter-spacing: 0.5px;
+}
+.nl-status-seg  { color: #00dcff; font-weight: 600; }
+.nl-status-mode { padding: 1px 7px; border-radius: 2px; font-weight: 700; letter-spacing: 0.6px; }
+.nl-mode-user   { background: rgba(107,182,255,0.16); color: #6cb6ff; }
+.nl-mode-priv   { background: rgba(255,138,128,0.16); color: #ff8a80; }
+.nl-mode-config { background: rgba(215,163,255,0.16); color: #d7a3ff; }
+.nl-status-busy { color: #27c93f; animation: nl-pulse 1s ease-in-out infinite; }
+@keyframes nl-pulse { 0%,100% { opacity: 1 } 50% { opacity: 0.35 } }
+.nl-status-spacer { flex: 1; }
+.nl-status-hint  { color: #5b6b80; }
+.nl-status-clock { color: #c5ccd6; font-variant-numeric: tabular-nums; }
+
+/* — 2D overlay framing — */
+.nl-term-scrim {
+  position: absolute; inset: 0; z-index: 50;
+  background: rgba(2, 4, 8, 0.82);
+  backdrop-filter: blur(6px);
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: auto; cursor: pointer;
+}
+
+/* Below this width the side panes would squeeze the console to nothing.
+   The 3D display has a fixed pixel size, so it opts out of both queries. */
+@media (max-width: 1100px) {
+  .nl-term-window:not(.nl-term-screen) .nl-side { display: none; }
+}
+@media (max-width: 760px) {
+  .nl-term-window:not(.nl-term-screen) .nl-term-titlebar { gap: 9px; padding: 7px 10px; }
+  .nl-term-window:not(.nl-term-screen) .nl-term-title    { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .nl-term-window:not(.nl-term-screen) .nl-term-title-dim,
+  .nl-term-window:not(.nl-term-screen) .nl-term-tabs     { display: none; }
+  .nl-term-window:not(.nl-term-screen) .nl-term-status   { gap: 7px; white-space: nowrap; overflow: hidden; }
+  .nl-term-window:not(.nl-term-screen) .nl-status-hint   { display: none; }
+  .nl-term-window:not(.nl-term-screen) .nl-term-scroll   { font-size: 11.5px; padding: 8px 10px; }
+}
+
+/* =========================================================
+   3D console mode — the panel itself is drawn in WebGL, so
+   the DOM only supplies a focus target and a small chrome bar.
+   ========================================================= */
+
+/* Focusable but invisible: a canvas texture cannot receive keystrokes. */
+.nl-term-capture {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 1px; height: 1px;
+  opacity: 0;
+  border: none; outline: none; padding: 0;
+  background: transparent;
+  z-index: 60;
+}
+
+.nl-term-3dbar {
+  position: absolute;
+  bottom: 18px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; align-items: center; gap: 14px;
+  padding: 7px 10px 7px 16px;
+  background: rgba(8, 12, 18, 0.82);
+  border: 1px solid rgba(0, 220, 255, 0.22);
+  border-radius: 999px;
+  backdrop-filter: blur(10px);
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: #5b6b80;
+  z-index: 60;
+  pointer-events: auto;
+}
+.nl-term-3dbar-host { color: #00dcff; font-weight: 700; letter-spacing: 0.5px; }
+.nl-term-3dbar-hint { color: #5b6b80; }
+.nl-term-3dbar-btn {
+  background: rgba(0, 220, 255, 0.12);
+  border: 1px solid rgba(0, 220, 255, 0.45);
+  color: #00dcff;
+  padding: 4px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+}
+.nl-term-3dbar-btn:hover { background: rgba(0, 220, 255, 0.22); }

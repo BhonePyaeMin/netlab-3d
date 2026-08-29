@@ -27,6 +27,7 @@ import { useFrame, useThree }                    from '@react-three/fiber'
 import { Text, Billboard }             from '@react-three/drei'
 import * as THREE                      from 'three'
 import { NetworkStore }                from '../network/NetworkStore'
+import { useTerminalSession }          from '../components/TerminalScreen'
 import { useNetworkStore }             from '../network/useNetworkStore'
 import type { Port }                   from '../network/types'
 
@@ -113,6 +114,12 @@ function Table({ pos, w=2.2, d=0.9, h=0.75 }:
    ============================================================ */
 function DeviceLabel({ id, type, height=0.25, color='#00dcff' }:
   { id:string; type:string; height?:number; color?:string }) {
+  const session = useTerminalSession()
+  // These billboards always face the camera, so during the 3D console shot they
+  // plant themselves across the laptop screen. They are lab wayfinding, not
+  // part of the cinematic.
+  if (session.deviceId && session.view === '3d') return null
+
   return (
     <Billboard follow lockX={false} lockY={false} lockZ={false}>
       <group position={[0, height, 0]}>
